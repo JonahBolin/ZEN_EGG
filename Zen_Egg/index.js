@@ -44,13 +44,37 @@ function loadPage(page) {
 function loadEggChoice() {
     console.log("Hej!");
 
-    divHeader.innerHTML = "";
+    changeLogoSize();
+
     mainScreen.innerHTML = "";
     divFooter.innerHTML = "";
 
-    appLogoSmall.classList.replace("appLogoBig", "appLogoSmall");
-    divHeader.appendChild(appLogoSmall);
+    const eggConsistencyParent = document.createElement("div");
+    const eggSizeParent = document.createElement("div");
+    const eggAmountParent = document.createElement("div");
 
+    const eggConsistencyQuestion = document.createElement("p");
+    const hardButton = document.createElement("button");
+    const softButton = document.createElement("button");
+    const runnyButton = document.createElement("button");
+
+
+    eggConsistencyQuestion.classList.add("consistencyQuestion");
+    eggConsistencyParent.classList.add("eggConsistencyParent");
+    eggSizeParent.classList.add("eggSizeParent");
+    eggAmountParent.classList.add("eggAmountParent");
+
+    hardButton.classList.add("hardButton");
+    softButton.classList.add("softButton");
+    runnyButton.classList.add("runnyButton");
+
+    eggConsistencyQuestion.textContent = "Choose an egg consistency";
+    hardButton.textContent = "Hard";
+    softButton.textContent = "Soft";
+    runnyButton.textContent = "Runny";
+
+    eggConsistencyParent.append(eggConsistencyQuestion, hardButton, softButton, runnyButton);
+    mainScreen.appendChild(eggConsistencyParent);
 
 }
 
@@ -66,4 +90,10 @@ function createButton(text) {
     return button;
 }
 
+function changeLogoSize() {
+
+    divHeader.innerHTML = "";
+    appLogo.classList.replace("appLogoBig", "appLogoSmall");
+    divHeader.appendChild(appLogo);
+}
 
