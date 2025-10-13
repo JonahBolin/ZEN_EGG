@@ -8,11 +8,30 @@ main {
     width: 100%;
 }
 
-#phone {
+.phone {
     width: 390px;
     height: 844px;
     background-image: url(backgrund/green_background.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+}
+
+.divHeader {
+    height: 15%;
+    border-bottom: black solid 2px;
+}
+
+.mainScreen {
+    height: 70%;
+}
+
+.divFooter {
+    height: 15%;
+    border-top: black solid 2px;
+}
+
+
+#appName {
+    font-family: Arial, Helvetica, sans-serif;
 }
