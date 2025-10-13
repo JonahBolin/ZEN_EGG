@@ -9,13 +9,14 @@ main {
 }
 
 .phone {
-    position: relative;
     width: 390px;
     height: 844px;
     background-image: url(backgrund/green_background.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .divHeader {
@@ -25,22 +26,50 @@ main {
 
 .mainScreen {
     height: 70%;
+
 }
 
 .divFooter {
     height: 15%;
     border-top: black solid 2px;
+    display: flex;
+    justify-content: center;
 }
 
 #appNameParent {
-    position: absolute;
-    top: 250px;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
 }
 
-#appName {
+#ZenEgg {
     font-family: Arial, Helvetica, sans-serif;
     color: black;
+    margin: 0px;
+}
 
+#appLogoParent {
+    display: flex;
+    justify-content: center;
+}
+
+.appLogoBig {
+    width: 275px;
+}
+
+.appLogoSmall {}
+
+.button {
+    background-color: #F5B9CA;
+    border-radius: 30px;
+    border: 3px solid #000;
+    display: flex;
+    width: 300px;
+    height: 72px;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
 }
