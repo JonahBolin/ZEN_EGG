@@ -1,0 +1,18 @@
+body {
+    width: 100%;
+    height: auto;
+    margin: 0px;
+}
+
+main {
+    width: 100%;
+}
+
+#phone {
+    width: 390px;
+    height: 844px;
+    background-image: url(backgrund/green_background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
