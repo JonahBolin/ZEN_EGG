@@ -78,3 +78,39 @@ main {
     gap: 10px;
     font-size: 20px;
 }
+
+.consistencyQuestion {
+    text-align: center;
+}
+
+.sizeQuestion {
+    text-align: center;
+}
+
+.eggButtonsDiv {
+    display: flex;
+    gap: 10px;
+}
+
+.eggButton {
+    padding: 20px 30px;
+    flex-grow: 1
+}
+
+.eggSizeChoiceDiv {
+    display: flex;
+    gap: 10px;
+}
+
+.sizeButton {
+    flex-grow: 1;
+}
+
+.amountQuestion {
+    text-align: center;
+}
+
+.amountInputDiv {
+    display: flex;
+    justify-content: center;
+}
