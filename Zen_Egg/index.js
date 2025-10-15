@@ -47,12 +47,31 @@ const boilingWaterInfo = document.createElement("p");
 const boilingInfoDiv = document.createElement("div");
 let boilingMinutesVariable = "";
 
+const nextButton = createButton("Next");
+nextButton.classList.add("nextButton");
+nextButton.addEventListener("click", loadWellnessChoices);
+
 inputStatus = false;
 let inputValue = "";
+
+//3:e sidan
+
+const wellnessQuestion = document.createElement("p");
+const wellnessQuestionParent = document.createElement("div");
+const wellnessChoicesDiv = document.createElement("div");
+const wellnessTotalDiv = document.createElement("div");
+
+wellnessQuestion.classList.add("wellnessQuestion");
+wellnessQuestionParent.classList.add("wellnessQuestionParent");
+wellnessChoicesDiv.classList.add("wellnessChoicesDiv");
+wellnessTotalDiv.classList.add("wellnessTotalDiv");
+
+wellnessQuestion.textContent = "What would you like to start your day with";
 
 const appLogo = document.createElement("img");
 appLogo.src = "./app_logga/egg_heart_zen2.png";
 appLogo.alt = "Zen Egg Logo";
+
 
 function loadPage(page) {
 
@@ -80,6 +99,7 @@ function loadPage(page) {
         appLogoParent.appendChild(appLogo);
 
         const homeButton = createButton("Get your day started");
+        homeButton.addEventListener("click", () => loadEggChoice());
         divFooter.appendChild(homeButton);
     }
 
@@ -92,6 +112,8 @@ function loadEggChoice() {
 
     mainScreen.innerHTML = "";
     divFooter.innerHTML = "";
+
+    divFooter.appendChild(nextButton);
 
     //section 1
     eggConsistencyQuestion.classList.add("consistencyQuestion");
@@ -150,27 +172,22 @@ function loadEggChoice() {
     mainScreen.appendChild(eggAmountParent);
 
     amountInput.addEventListener("input", () => {
-        if (!divFooter.querySelector(".nextButton")) {
 
-            inputValue = amountInput.value;
-            console.log(inputValue, "värdet i input som användaren angav");
+        inputValue = amountInput.value;
+        console.log(inputValue, "värdet i input som användaren angav");
 
+        inputStatus = true;
 
-            inputStatus = true;
-            const nextButton = createButton("Next");
-            nextButton.classList.add("nextButton");
-            divFooter.appendChild(nextButton);
-
-            checkIfBoilingIsReady();
-        }
+        checkIfBoilingIsReady();
     })
 
     //section 4
 
     boilingInfoDiv.append(boilingTimeInfo, boilingWaterInfo);
     mainScreen.appendChild(boilingInfoDiv);
-    boilingInfoDiv.classList.add("boilingTimeDivHidden");
-    boilingTimeInfo.classList.add()
+    boilingInfoDiv.classList.add("boilingInfoDiv");
+    boilingTimeInfo.classList.add("boilingTimeInfo");
+    boilingWaterInfo.classList.add("boilingWaterInfo");
 
 }
 
@@ -182,7 +199,6 @@ function createButton(text) {
     const button = document.createElement("button");
     button.textContent = text;
     button.classList.add("button");
-    button.addEventListener("click", () => loadEggChoice());
     return button;
 }
 
@@ -193,12 +209,15 @@ function changeLogoSize() {
 }
 
 function checkIfBoilingIsReady() {
-    if (chosenConsistency && chosenSize && inputStatus && inputValue) {
+    if (chosenConsistency && chosenSize && inputStatus && inputValue !== "") {
+        nextButton.style.display = "block";
+
         getBoilingInfo(chosenConsistency, chosenSize, inputValue);
     }
 }
 
 function getBoilingInfo(selectedConsistency, selectedsize, inputValue) {
+    console.log(selectedConsistency, selectedsize, inputValue, "getBoiling är anropad");
 
     boilingWaterInfo.textContent = "";
     console.log(boilingInfoDiv);
@@ -213,22 +232,36 @@ function getBoilingInfo(selectedConsistency, selectedsize, inputValue) {
 
             break;
         }
-
-        //beräkna vattenmängd:
-        const inputValueConverted = Number(inputValue);
-        if (inputValueConverted <= 1) {
-            boilingWaterInfo.textContent = "Use a small saucepan and fill it with enough water so that it covers the egg";
-
-        } else if (inputValueConverted >= 2 && inputValueConverted <= 4) {
-            boilingWaterInfo.textContent = "Use a medium sized saucepan and fill it with enough water so that the eggs are covered by 1-2 cm";
-
-        } else {
-            boilingWaterInfo.textContent = "Use a medium to big saucepan and fill it with enough water so that all eggs are covered by at least 2 cm water";
-        }
-
-        boilingInfoDiv.classList.remove("boilingTimeDivHidden");
     }
 
+    //beräkna vattenmängd:
+    const inputValueConverted = Number(inputValue);
+    if (inputValueConverted <= 1) {
+        boilingWaterInfo.textContent = "Use a small saucepan and fill it with enough water so that it covers the egg";
+
+    } else if (inputValueConverted >= 2 && inputValueConverted <= 4) {
+        boilingWaterInfo.textContent = "Use a medium sized saucepan and fill it with enough water so that the eggs are covered by 1-2 cm";
+
+    } else {
+        boilingWaterInfo.textContent = "Use a bigger saucepan and fill it with enough water so that all eggs are covered by at least 2 cm water";
+    }
+
+}
+
+function loadWellnessChoices() {
+    console.log("hej på dig")
+
+    mainScreen.innerHTML = "";
+    divFooter.innerHTML = "";
+
+    const meditationButton = createButton("Meditation");
+    const stretchingButton = createButton("Stretching exercises");
+    const affirmationsButton = createButton("Positive affirmations");
+
+    wellnessChoicesDiv.append(meditationButton, stretchingButton, affirmationsButton);
+    wellnessQuestionParent.appendChild(wellnessQuestion);
+    wellnessTotalDiv.append(wellnessQuestionParent, wellnessChoicesDiv);
+    mainScreen.appendChild(wellnessTotalDiv);
 }
 
 
