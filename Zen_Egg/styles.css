@@ -114,3 +114,7 @@ main {
     display: flex;
     justify-content: center;
 }
+
+.amountInput {
+    text-align: center;
+}
