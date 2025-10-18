@@ -125,3 +125,29 @@ main {
 .boilingInfoDiv {
     text-align: center;
 }
+
+.backButton {
+    width: 57px;
+    height: 51px;
+    background: none;
+    border: none;
+}
+
+.backArrow {
+    max-width: 100%;
+}
+
+.wellnessQuestionParent {
+    text-align: center;
+}
+
+.wellnessChoicesDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.hidden {
+    display: none;
+}

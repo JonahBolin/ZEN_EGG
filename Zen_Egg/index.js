@@ -4,8 +4,7 @@ const mainScreen = document.querySelector(".mainScreen");
 const divFooter = document.querySelector(".divFooter");
 
 //1:a sidan
-const homeButton = document.createElement("button");
-homeButton.textContent = "";
+const homeButton = createButton("Get your day started");
 
 //2:a sidan
 const eggConsistencyParent = document.createElement("div");
@@ -49,12 +48,14 @@ let boilingMinutesVariable = "";
 
 const nextButton = createButton("Next");
 nextButton.classList.add("nextButton");
-nextButton.addEventListener("click", loadWellnessChoices);
+nextButton.addEventListener("click", () => loadPage("wellnessChoices"));
 
 inputStatus = false;
 let inputValue = "";
 
 //3:e sidan
+
+const backToLastPageDiv = document.createElement("div");
 
 const wellnessQuestion = document.createElement("p");
 const wellnessQuestionParent = document.createElement("div");
@@ -66,14 +67,51 @@ wellnessQuestionParent.classList.add("wellnessQuestionParent");
 wellnessChoicesDiv.classList.add("wellnessChoicesDiv");
 wellnessTotalDiv.classList.add("wellnessTotalDiv");
 
-wellnessQuestion.textContent = "What would you like to start your day with";
+wellnessQuestion.textContent = "What would you like to start your day with?";
+let wellnessChoiceVariable = "";
+
+const meditationButton = createButton("Meditation");
+const stretchingButton = createButton("Stretching exercises");
+const affirmationsButton = createButton("Positive affirmations");
+wellnessChoicesDiv.append(meditationButton, stretchingButton, affirmationsButton);
+
+meditationButton.addEventListener("click", () => {
+    wellnessChoiceVariable = meditationButton.textContent;
+    loadPage("summaryPage");
+
+})
+
+stretchingButton.addEventListener("click", () => {
+    wellnessChoiceVariable = stretchingButton.textContent;
+    loadPage("summaryPage");
+})
+
+affirmationsButton.addEventListener("click", () => {
+    wellnessChoiceVariable = affirmationsButton.textContent;
+    loadPage("summaryPage");
+})
+
+//4:e sidan
+// const backToWellnessChoicesButton = document.createElement("button");
+// const backArrow2 = document.createElement("img");
+// backArrow2.src = "./ikoner/back_arrow.png";
+// backArrow2.classList.add("backArrow");
+// backToWellnessChoicesButton.classList.add("backToWellnessChoicesButton", "backButton");
+
+//övrigt
 
 const appLogo = document.createElement("img");
 appLogo.src = "./app_logga/egg_heart_zen2.png";
 appLogo.alt = "Zen Egg Logo";
 
+let currentPage = "home";
+let previousPage = null;
 
 function loadPage(page) {
+    console.log(`Navigerar från ${currentPage} till ${page}`);
+    previousPage = currentPage;
+    currentPage = page;
+    console.log(`previousPage: ${previousPage}, currentPage: ${currentPage}`);
 
     if (page === "home") {
 
@@ -98,12 +136,23 @@ function loadPage(page) {
 
         appLogoParent.appendChild(appLogo);
 
-        const homeButton = createButton("Get your day started");
-        homeButton.addEventListener("click", () => loadEggChoice());
         divFooter.appendChild(homeButton);
     }
 
+    if (page === "eggChoices") {
+        loadEggChoice();
+    }
+
+    if (page === "wellnessChoices") {
+        loadWellnessChoices();
+    }
+
+    if (page === "summaryPage") {
+        loadSummaryPage();
+    }
 }
+
+homeButton.addEventListener("click", () => loadPage("eggChoices"));
 
 function loadEggChoice() {
     console.log("Hej!");
@@ -113,6 +162,7 @@ function loadEggChoice() {
     mainScreen.innerHTML = "";
     divFooter.innerHTML = "";
 
+    amountInput.value = inputValue;
     divFooter.appendChild(nextButton);
 
     //section 1
@@ -202,6 +252,25 @@ function createButton(text) {
     return button;
 }
 
+function createBackButton() {
+
+    const backToChoicesButton = document.createElement("button");
+    const backArrow = document.createElement("img");
+    backArrow.src = "./ikoner/back_arrow.png";
+
+    backToChoicesButton.appendChild(backArrow);
+    backToChoicesButton.classList.add("backButton");
+    backArrow.classList.add("backArrow");
+
+    backToChoicesButton.addEventListener("click", () => {
+        if (previousPage) {
+            loadPage(previousPage);
+        }
+    });
+
+    return backToChoicesButton;
+}
+
 function changeLogoSize() {
     divHeader.innerHTML = "";
     appLogo.classList.replace("appLogoBig", "appLogoSmall");
@@ -210,7 +279,6 @@ function changeLogoSize() {
 
 function checkIfBoilingIsReady() {
     if (chosenConsistency && chosenSize && inputStatus && inputValue !== "") {
-        nextButton.style.display = "block";
 
         getBoilingInfo(chosenConsistency, chosenSize, inputValue);
     }
@@ -254,15 +322,24 @@ function loadWellnessChoices() {
     mainScreen.innerHTML = "";
     divFooter.innerHTML = "";
 
-    const meditationButton = createButton("Meditation");
-    const stretchingButton = createButton("Stretching exercises");
-    const affirmationsButton = createButton("Positive affirmations");
+    backToLastPageDiv.innerHTML = "";
+    backToLastPageDiv.classList.add("backToLastPageDiv");
 
-    wellnessChoicesDiv.append(meditationButton, stretchingButton, affirmationsButton);
+    const backToChoicesButton = createBackButton();
+    backToLastPageDiv.appendChild(backToChoicesButton);
+
     wellnessQuestionParent.appendChild(wellnessQuestion);
-    wellnessTotalDiv.append(wellnessQuestionParent, wellnessChoicesDiv);
+    wellnessTotalDiv.append(backToLastPageDiv, wellnessQuestionParent, wellnessChoicesDiv);
     mainScreen.appendChild(wellnessTotalDiv);
 }
+
+function loadSummaryPage() {
+    wellnessQuestionParent.innerHTML = "";
+    wellnessChoicesDiv.innerHTML = "";
+    backToLastPageDiv.innerHTML = "";
+
+}
+
 
 
 
