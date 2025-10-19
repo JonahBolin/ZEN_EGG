@@ -11,10 +11,7 @@ main {
 .phone {
     width: 390px;
     height: 844px;
-    background-image: url(backgrund/green_background.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+    background: rgba(164, 213, 136, 0.42);
     padding: 20px;
     box-sizing: border-box;
 }
@@ -150,4 +147,29 @@ main {
 
 .hidden {
     display: none;
+}
+
+.summaryDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer {
+    text-align: center;
+    margin-top: 0px;
+}
+
+.todaysPreferences {
+    text-align: center;
+}
+
+.timerButtons {
+    width: 143px;
+    height: 50px;
+    padding: 10px;
+}
+
+.pauseButton {
+    display: flex;
 }

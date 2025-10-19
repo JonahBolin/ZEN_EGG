@@ -40,6 +40,7 @@ amountInput.type = "number";
 amountQuestion.textContent = "Specify how many eggs";
 let chosenConsistency = "";
 let chosenSize = "";
+let chosenWellness = "";
 
 const boilingTimeInfo = document.createElement("p");
 const boilingWaterInfo = document.createElement("p");
@@ -68,26 +69,28 @@ wellnessChoicesDiv.classList.add("wellnessChoicesDiv");
 wellnessTotalDiv.classList.add("wellnessTotalDiv");
 
 wellnessQuestion.textContent = "What would you like to start your day with?";
-let wellnessChoiceVariable = "";
 
 const meditationButton = createButton("Meditation");
 const stretchingButton = createButton("Stretching exercises");
 const affirmationsButton = createButton("Positive affirmations");
-wellnessChoicesDiv.append(meditationButton, stretchingButton, affirmationsButton);
+
+meditationButton.classList.add("meditationButton");
+stretchingButton.classList.add("stretchingButton");
+affirmationsButton.classList.add("affirmationsButton");
 
 meditationButton.addEventListener("click", () => {
-    wellnessChoiceVariable = meditationButton.textContent;
+    chosenWellness = meditationButton.textContent;
     loadPage("summaryPage");
 
 })
 
 stretchingButton.addEventListener("click", () => {
-    wellnessChoiceVariable = stretchingButton.textContent;
+    chosenWellness = stretchingButton.textContent;
     loadPage("summaryPage");
 })
 
 affirmationsButton.addEventListener("click", () => {
-    wellnessChoiceVariable = affirmationsButton.textContent;
+    chosenWellness = affirmationsButton.textContent;
     loadPage("summaryPage");
 })
 
@@ -100,18 +103,56 @@ affirmationsButton.addEventListener("click", () => {
 
 //övrigt
 
+//5:e sidan
+const timerDiv = document.createElement("div");
+const timer = document.createElement("p");
+const startButton = createButton("Start");
+const preferencesDiv = document.createElement("div");
+const todaysPreferences = document.createElement("p");
+const usersPreferences = document.createElement("p");
+
+timerDiv.classList.add("timerDiv");
+timer.classList.add("timer");
+startButton.classList.add("startButton", "timerButtons");
+preferencesDiv.classList.add("preferencesDiv");
+todaysPreferences.classList.add("todaysPreferences");
+usersPreferences.classList.add("usersPreferences");
+
 const appLogo = document.createElement("img");
 appLogo.src = "./app_logga/egg_heart_zen2.png";
 appLogo.alt = "Zen Egg Logo";
 
+//6:e sidan
+
+const pauseButton = createButton("Pause");
+const cancelButton = createButton("Cancel");
+
+const timerButtonsDiv = document.createElement("div");
+timerButtonsDiv.classList.add("timerButtonsDiv");
+
+pauseButton.classList.add("pauseButton", "timerButtons");
+cancelButton.classList.add("cancelButton", "timerButtons");
+
+let timerInterval;
+let timeRemaining = 0;
+let isPaused = false;
+
+//övrigt
+
 let currentPage = "home";
 let previousPage = null;
+let pageHistory = [];
 
-function loadPage(page) {
+function loadPage(page, isBack = false) {
     console.log(`Navigerar från ${currentPage} till ${page}`);
     previousPage = currentPage;
-    currentPage = page;
     console.log(`previousPage: ${previousPage}, currentPage: ${currentPage}`);
+
+    if (!isBack && currentPage !== page) {
+        pageHistory.push(currentPage);
+    }
+
+    currentPage = page;
 
     if (page === "home") {
 
@@ -263,8 +304,15 @@ function createBackButton() {
     backArrow.classList.add("backArrow");
 
     backToChoicesButton.addEventListener("click", () => {
-        if (previousPage) {
-            loadPage(previousPage);
+
+        clearInterval(timerInterval);
+        isPaused = true;
+        timerStarted = false;
+
+        console.log(pageHistory, "historik");
+        if (pageHistory.length > 0) {
+            const previousPage = pageHistory.pop();
+            loadPage(previousPage, true);
         }
     });
 
@@ -313,7 +361,6 @@ function getBoilingInfo(selectedConsistency, selectedsize, inputValue) {
     } else {
         boilingWaterInfo.textContent = "Use a bigger saucepan and fill it with enough water so that all eggs are covered by at least 2 cm water";
     }
-
 }
 
 function loadWellnessChoices() {
@@ -329,17 +376,147 @@ function loadWellnessChoices() {
     backToLastPageDiv.appendChild(backToChoicesButton);
 
     wellnessQuestionParent.appendChild(wellnessQuestion);
+    wellnessChoicesDiv.append(meditationButton, stretchingButton, affirmationsButton);
     wellnessTotalDiv.append(backToLastPageDiv, wellnessQuestionParent, wellnessChoicesDiv);
     mainScreen.appendChild(wellnessTotalDiv);
 }
 
+
+const summaryDiv = document.createElement("div");
+summaryDiv.classList.add("summaryDiv");
+
+let chosenSizeExtended = "";
+let eggsOfInputValue = "";
+
+let timerStarted = false;
+
 function loadSummaryPage() {
     wellnessQuestionParent.innerHTML = "";
     wellnessChoicesDiv.innerHTML = "";
-    backToLastPageDiv.innerHTML = "";
+    mainScreen.innerHTML = "";
 
+    clearInterval(timerInterval);
+    backToLastPageDiv.innerHTML = ""; // rensa tidigare knapp så du inte får dubbletter
+    const backToChoicesButton = createBackButton();
+    backToLastPageDiv.appendChild(backToChoicesButton);
+    mainScreen.appendChild(backToLastPageDiv);
+
+    isPaused = false;
+    timerStarted = false;
+    timeRemaining = boilingMinutesVariable * 60; // reset till ny koktid
+    updateTimerDisplay(); // visa korrekt starttid
+
+    timer.textContent = boilingMinutesVariable;
+    if (boilingMinutesVariable < 10) {
+        timer.textContent = `0${boilingMinutesVariable}:00`;
+    } else {
+        timer.textContent = `${boilingMinutesVariable}:00`;
+    }
+
+    if (inputValue < 2) {
+        eggsOfInputValue = `${inputValue} egg`;
+    } else {
+        eggsOfInputValue = `${inputValue} eggs`;
+    }
+
+    if (chosenSize === "S") {
+        chosenSizeExtended = `${chosenSize}` + `mall`;
+    } else if (chosenSize === "M") {
+        chosenSizeExtended = `${chosenSize}` + `edium`;
+    } else if (chosenSize === "L") {
+        chosenSizeExtended = `${chosenSize}` + `arge`;
+    } else {
+        chosenSizeExtended = `${chosenSize}` + `arge`;
+    }
+
+    showButtons("ready");
+
+    timerDiv.append(timer, startButton);
+    todaysPreferences.textContent = `Todays preferences:`;
+    usersPreferences.textContent = `${chosenConsistency}, ${chosenSizeExtended}, ${eggsOfInputValue}, ${chosenWellness}`;
+    preferencesDiv.append(todaysPreferences, usersPreferences);
+    summaryDiv.append(timerDiv, preferencesDiv);
+
+    mainScreen.appendChild(summaryDiv);
 }
 
 
+// let timerInterval;
+// let timeRemaining = 0;
+// let isPaused = false;
+const TEST_MODE = true;
+
+
+function startTimer(duration) {
+    if (TEST_MODE) {
+        duration = 5; // 5 sekunder istället för 6 minuter
+    }
+    timeRemaining = duration;
+    updateTimerDisplay();
+    showButtons("running");
+
+    preferencesDiv.innerHTML = "";
+
+    clearInterval(timerInterval); // säkerhetsåtgärd
+    timerInterval = setInterval(() => {
+        if (!isPaused && timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert("Your eggs are ready!");
+
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    timer.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
+
+// Styr vilka knappar som visas
+function showButtons(state) {
+    timerDiv.innerHTML = ""; // töm innehållet
+    timerDiv.appendChild(timer);
+
+    if (state === "ready") {
+        timerDiv.append(startButton);
+    } else if (state === "running") {
+        timerDiv.append(pauseButton, cancelButton);
+    } else if (state === "paused") {
+        timerDiv.append(startButton, cancelButton);
+    } else if (state === "finished") {
+        timerDiv.append(startButton);
+    }
+}
+
+startButton.addEventListener("click", () => {
+    if (!timerStarted) {
+        timerStarted = true;
+        startTimer(timeRemaining);
+
+    } else if (isPaused) {
+        isPaused = false
+        showButtons("running");
+    }
+});
+
+pauseButton.addEventListener("click", () => {
+    isPaused = true;
+    showButtons("paused");
+});
+
+cancelButton.addEventListener("click", () => {
+    clearInterval(timerInterval);
+    isPaused = false;
+    timerStarted = false;
+    timeRemaining = 0;
+    updateTimerDisplay();
+    showButtons("ready");
+
+    loadPage("home");
+});
 
 
