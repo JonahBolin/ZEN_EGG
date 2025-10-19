@@ -47,12 +47,25 @@ const boilingWaterInfo = document.createElement("p");
 const boilingInfoDiv = document.createElement("div");
 let boilingMinutesVariable = "";
 
+let inputValue = "";
+
 const nextButton = createButton("Next");
 nextButton.classList.add("nextButton");
-nextButton.addEventListener("click", () => loadPage("wellnessChoices"));
+nextButton.addEventListener("click", () => {
 
-inputStatus = false;
-let inputValue = "";
+    if (!chosenConsistency || !chosenSize || !inputValue || Number(inputValue) <= 0) {
+
+        boilingInfoDiv.innerHTML = "";
+        const promptToChoose = document.createElement("p");
+        promptToChoose.textContent = "You have to select consistency, size and amount";
+        promptToChoose.classList.add("promptToChoose");
+        boilingInfoDiv.appendChild(promptToChoose);
+
+        return;
+    }
+
+    loadPage("wellnessChoices")
+});
 
 //3:e sidan
 
@@ -63,7 +76,7 @@ const wellnessQuestionParent = document.createElement("div");
 const wellnessChoicesDiv = document.createElement("div");
 const wellnessTotalDiv = document.createElement("div");
 
-wellnessQuestion.classList.add("wellnessQuestion");
+wellnessQuestion.classList.add("wellnessQuestion", "font-zen-text");
 wellnessQuestionParent.classList.add("wellnessQuestionParent");
 wellnessChoicesDiv.classList.add("wellnessChoicesDiv");
 wellnessTotalDiv.classList.add("wellnessTotalDiv");
@@ -112,9 +125,9 @@ const todaysPreferences = document.createElement("p");
 const usersPreferences = document.createElement("p");
 
 timerDiv.classList.add("timerDiv");
-timer.classList.add("timer");
+timer.classList.add("timer", "font-zen-text");
 startButton.classList.add("startButton", "timerButtons");
-preferencesDiv.classList.add("preferencesDiv");
+preferencesDiv.classList.add("preferencesDiv", "font-zen-text");
 todaysPreferences.classList.add("todaysPreferences");
 usersPreferences.classList.add("usersPreferences");
 
@@ -224,7 +237,7 @@ function loadEggChoice() {
     divFooter.appendChild(nextButton);
 
     //section 1
-    eggConsistencyQuestion.classList.add("consistencyQuestion");
+    eggConsistencyQuestion.classList.add("consistencyQuestion", "font-zen-text");
     eggConsistencyParent.classList.add("eggConsistencyParent");
 
     eggButtonsDiv.classList.add("eggButtonsDiv");
@@ -250,7 +263,7 @@ function loadEggChoice() {
     //section 2
     eggSizeParent.classList.add("eggSizeParent");
     eggSizeChoiceDiv.classList.add("eggSizeChoiceDiv");
-    eggSizeQuestion.classList.add("sizeQuestion");
+    eggSizeQuestion.classList.add("sizeQuestion", "font-zen-text");
     eggSizeSButton.classList.add("eggSizeSButton", "sizeButton");
     eggSizeMButton.classList.add("eggSizeMButton", "sizeButton");
     eggSizeLButton.classList.add("eggSizeLButton", "sizeButton");
@@ -271,8 +284,8 @@ function loadEggChoice() {
 
     //section 3
     eggAmountParent.classList.add("eggAmountParent");
-    amountInput.classList.add("amountInput");
-    amountQuestion.classList.add("amountQuestion");
+    amountInput.classList.add("amountInput", "font-zen-text");
+    amountQuestion.classList.add("amountQuestion", "font-zen-text");
     amountInputDiv.classList.add("amountInputDiv");
 
     eggAmountParent.append(amountQuestion, amountInputDiv);
@@ -281,12 +294,18 @@ function loadEggChoice() {
 
     amountInput.addEventListener("input", () => {
 
-        inputValue = amountInput.value;
+        inputValue = Number(amountInput.value);
         console.log(inputValue, "värdet i input som användaren angav");
+        if (inputValue <= 0) {
 
-        inputStatus = true;
-
-        checkIfBoilingIsReady();
+            boilingInfoDiv.innerHTML = "";
+            const promptToChoose = document.createElement("p");
+            promptToChoose.textContent = "Invalid amount";
+            promptToChoose.classList.add("promptToChoose", "font-zen-text");
+            boilingInfoDiv.appendChild(promptToChoose);
+        } else if (inputValue > 0) {
+            checkIfBoilingIsReady();
+        }
     })
 
     //section 4
@@ -294,8 +313,8 @@ function loadEggChoice() {
     boilingInfoDiv.append(boilingTimeInfo, boilingWaterInfo);
     mainScreen.appendChild(boilingInfoDiv);
     boilingInfoDiv.classList.add("boilingInfoDiv");
-    boilingTimeInfo.classList.add("boilingTimeInfo");
-    boilingWaterInfo.classList.add("boilingWaterInfo");
+    boilingTimeInfo.classList.add("boilingTimeInfo", "font-zen-text");
+    boilingWaterInfo.classList.add("boilingWaterInfo", "font-zen-text");
 
 }
 
@@ -343,17 +362,23 @@ function changeLogoSize() {
 }
 
 function checkIfBoilingIsReady() {
-    if (chosenConsistency && chosenSize && inputStatus && inputValue !== "") {
 
+    if (chosenConsistency && chosenSize && inputValue && Number(inputValue > 0)) {
         getBoilingInfo(chosenConsistency, chosenSize, inputValue);
     }
+    else {
+        boilingTimeInfo.textContent = "";
+        boilingWaterInfo.textContent = "";
+    }
+
 }
 
 function getBoilingInfo(selectedConsistency, selectedsize, inputValue) {
     console.log(selectedConsistency, selectedsize, inputValue, "getBoiling är anropad");
 
     boilingWaterInfo.textContent = "";
-    console.log(boilingInfoDiv);
+    boilingInfoDiv.textContent = "";
+
     console.log("Detta har valts:", selectedConsistency, selectedsize, inputValue);
     for (let object of eggBoilingTime) {
         console.log(object, "objektet som loopas genom nu");
@@ -362,6 +387,8 @@ function getBoilingInfo(selectedConsistency, selectedsize, inputValue) {
             console.log(object.time, "koktiden för detta ägg");
             boilingTimeInfo.textContent = `Boiling Time: ${boilingMinutesVariable} minutes`;
             console.log(boilingMinutesVariable);
+
+            boilingInfoDiv.append(boilingTimeInfo, boilingWaterInfo);
 
             break;
         }
@@ -493,7 +520,7 @@ function startTimer(duration) {
 
             const finalMessage = document.createElement("p");
             finalMessage.textContent = "Have a wonderful day and bon appétit!";
-            finalMessage.classList.add("finalMessage");
+            finalMessage.classList.add("finalMessage", "font-zen-text");
             finalElementsDiv.append(finalMessage, finalEggIcon);
             mainScreen.appendChild(finalElementsDiv);
 
@@ -542,6 +569,7 @@ startButton.addEventListener("click", () => {
 
         if (chosenWellness === "Meditation") {
             const meditationMessage = document.createElement("p");
+            meditationMessage.classList.add("meditationMessage", "font-zen-text");
             meditationMessage.textContent = "Find a comfortable place to sit or stand, as well as a comfortable position to meditate in.";
             minfulnessTextDiv.appendChild(meditationMessage);
 
@@ -567,7 +595,7 @@ function showPositiveAffirmations(index) {
 
     const affirmation = positiveAffirmations[index];
     let affirmationMessage = document.createElement("p");
-    affirmationMessage.classList.add("affirmationMessage");
+    affirmationMessage.classList.add("affirmationMessage", "font-zen-text");
     affirmationMessage.textContent = affirmation.message;
 
     minfulnessTextDiv.appendChild(affirmationMessage);
@@ -592,8 +620,8 @@ function showStretchingExercise(index) {
     stretchingTitle.textContent = exercise.title;
     stretchingInstructions.textContent = exercise.description;
 
-    stretchingTitle.classList.add("stretchingTitle");
-    stretchingInstructions.classList.add("stretchingInstructions");
+    stretchingTitle.classList.add("stretchingTitle", "font-zen-text");
+    stretchingInstructions.classList.add("stretchingInstructions", "font-zen-text");
 
     minfulnessTextDiv.append(stretchingTitle, stretchingInstructions);
 
