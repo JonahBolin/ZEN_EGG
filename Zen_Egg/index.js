@@ -58,7 +58,7 @@ nextButton.addEventListener("click", () => {
         boilingInfoDiv.innerHTML = "";
         const promptToChoose = document.createElement("p");
         promptToChoose.textContent = "You have to select consistency, size and amount";
-        promptToChoose.classList.add("promptToChoose");
+        promptToChoose.classList.add("promptToChoose", "font-zen-text");
         boilingInfoDiv.appendChild(promptToChoose);
 
         return;
@@ -241,9 +241,9 @@ function loadEggChoice() {
     eggConsistencyParent.classList.add("eggConsistencyParent");
 
     eggButtonsDiv.classList.add("eggButtonsDiv");
-    hardButton.classList.add("hardButton", "eggButton");
-    softButton.classList.add("softButton", "eggButton");
-    runnyButton.classList.add("runnyButton", "eggButton");
+    hardButton.classList.add("hardButton", "eggButton", "font-zen-buttons");
+    softButton.classList.add("softButton", "eggButton", "font-zen-buttons");
+    runnyButton.classList.add("runnyButton", "eggButton", "font-zen-buttons");
 
     eggConsistencyParent.appendChild(eggConsistencyQuestion);
     eggButtonsDiv.append(hardButton, softButton, runnyButton);
@@ -253,6 +253,13 @@ function loadEggChoice() {
     const allConsistencyButtons = document.querySelectorAll(".eggButton");
     for (let consistencyButton of allConsistencyButtons) {
         consistencyButton.addEventListener("click", function () {
+
+            for (let b of allConsistencyButtons) {
+                b.classList.remove("selected");
+            }
+
+            consistencyButton.classList.add("selected");
+
             chosenConsistency = consistencyButton.textContent;
             console.log(chosenConsistency);
 
@@ -264,10 +271,10 @@ function loadEggChoice() {
     eggSizeParent.classList.add("eggSizeParent");
     eggSizeChoiceDiv.classList.add("eggSizeChoiceDiv");
     eggSizeQuestion.classList.add("sizeQuestion", "font-zen-text");
-    eggSizeSButton.classList.add("eggSizeSButton", "sizeButton");
-    eggSizeMButton.classList.add("eggSizeMButton", "sizeButton");
-    eggSizeLButton.classList.add("eggSizeLButton", "sizeButton");
-    eggSizeXLButton.classList.add("eggSizeXLButton", "sizeButton");
+    eggSizeSButton.classList.add("eggSizeSButton", "sizeButton", "font-zen-buttons", "hoverButton");
+    eggSizeMButton.classList.add("eggSizeMButton", "sizeButton", "font-zen-buttons", "hoverButton");
+    eggSizeLButton.classList.add("eggSizeLButton", "sizeButton", "font-zen-buttons", "hoverButton");
+    eggSizeXLButton.classList.add("eggSizeXLButton", "sizeButton", "font-zen-buttons", "hoverButton");
 
     eggSizeChoiceDiv.append(eggSizeSButton, eggSizeMButton, eggSizeLButton, eggSizeXLButton);
     eggSizeParent.append(eggSizeQuestion, eggSizeChoiceDiv);
@@ -276,6 +283,12 @@ function loadEggChoice() {
     const allSizeButtons = document.querySelectorAll(".sizeButton");
     for (let sizeButton of allSizeButtons) {
         sizeButton.addEventListener("click", function () {
+
+            for (let b of allSizeButtons) {
+                b.classList.remove("selected");
+            }
+
+            sizeButton.classList.add("selected");
             chosenSize = sizeButton.textContent;
             console.log(chosenSize);
             checkIfBoilingIsReady();
@@ -325,7 +338,7 @@ window.addEventListener("DOMContentLoaded", () => {
 function createButton(text) {
     const button = document.createElement("button");
     button.textContent = text;
-    button.classList.add("button");
+    button.classList.add("button", "font-zen-buttons");
     return button;
 }
 

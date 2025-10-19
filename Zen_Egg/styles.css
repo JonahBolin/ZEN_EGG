@@ -3,10 +3,20 @@
     src: url("fonts/Fredoka/Fredoka-VariableFont_wdth\,wght.ttf");
 }
 
+@font-face {
+    font-family: "Quicksand-VariableFont_wght.tff";
+    src: url("fonts/Quicksand/Quicksand-VariableFont_wght.ttf");
+}
+
 .font-zen-text {
     font-family: "Fredoka-VariableFont_wdth\,wght.ttf";
     letter-spacing: 0.52px;
     font-size: 19px;
+}
+
+.font-zen-buttons {
+    font-family: "Quicksand-VariableFont_wght.tff";
+    letter-spacing: 0.72px;
 }
 
 body {
@@ -29,7 +39,6 @@ main {
 
 .divHeader {
     height: 12%;
-    border-bottom: black solid 2px;
     width: 100%;
 }
 
@@ -41,7 +50,6 @@ main {
 
 .divFooter {
     height: 12%;
-    border-top: black solid 2px;
     display: flex;
     justify-content: center;
 }
@@ -65,7 +73,7 @@ main {
 }
 
 .appLogoBig {
-    width: 250px;
+    width: 230px;
 }
 
 .appLogoSmall {
@@ -80,11 +88,9 @@ main {
     border: 3px solid #000;
     display: flex;
     width: 300px;
-    height: 72px;
-    padding: 10px 20px;
+    height: 55px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     font-size: 20px;
 }
 
@@ -103,7 +109,10 @@ main {
 
 .eggButton {
     padding: 20px 30px;
-    flex-grow: 1
+    flex-grow: 1;
+    background-color: #F5B9CA;
+    border-radius: 13px;
+    border: 0px;
 }
 
 .eggSizeChoiceDiv {
@@ -114,6 +123,18 @@ main {
 .sizeButton {
     flex-grow: 1;
     padding: 20px 10px;
+    background-color: #F5B9CA;
+    border-radius: 13px;
+    border: 0px;
+}
+
+.sizeButton:hover,
+.eggButton:hover {
+    background-color: #e2a2b4;
+}
+
+.selected {
+    border: 2px solid #000;
 }
 
 .amountQuestion {
@@ -189,6 +210,10 @@ main {
     display: flex;
 }
 
+.meditationMessage {
+    text-align: center;
+}
+
 .stretchingTitle {
     text-align: center;
 }
@@ -204,4 +229,8 @@ main {
 
 .finalEggIcon {
     height: 150px;
+}
+
+.usersPreferences {
+    text-align: center;
 }
