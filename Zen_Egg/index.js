@@ -145,6 +145,11 @@ let currentAffirmationIndex = 0;
 const nextExerciseButton = createButton("Next exercise");
 const nextAffirmationButton = createButton("Next affirmation");
 
+
+//7:e sidan 
+
+const finalElementsDiv = document.createElement("div");
+finalElementsDiv.classList.add("finalElementsDiv");
 //övrigt
 
 let currentPage = "home";
@@ -478,6 +483,27 @@ function startTimer(duration) {
             clearInterval(timerInterval);
             alert("Your eggs are ready!");
 
+            minfulnessTextDiv.innerHTML = "";
+            timerButtonsDiv.innerHTML = "";
+
+            const finalEggIcon = document.createElement("img");
+            finalEggIcon.src = "./ikoner/transparent_happy_egg.png";
+            finalEggIcon.alt = "Happy egg logo";
+            finalEggIcon.classList.add("finalEggIcon");
+
+            const finalMessage = document.createElement("p");
+            finalMessage.textContent = "Have a wonderful day and bon appétit!";
+            finalMessage.classList.add("finalMessage");
+            finalElementsDiv.append(finalMessage, finalEggIcon);
+            mainScreen.appendChild(finalElementsDiv);
+
+            const doneButton = createButton("Done");
+            doneButton.addEventListener("click", () => {
+                loadPage("home");
+            })
+
+            divFooter.innerHTML = "";
+            divFooter.appendChild(doneButton);
         }
     }, 1000);
 }
@@ -548,10 +574,11 @@ function showPositiveAffirmations(index) {
     mainScreen.appendChild(minfulnessTextDiv);
 
     if (index < positiveAffirmations.length - 1) {
+        console.log(index, "indexet");
         nextAffirmationButton.style.display = "inline-block";
         divFooter.appendChild(nextAffirmationButton);
     } else {
-        nextExerciseButton.style.display = "none";
+        nextAffirmationButton.style.display = "none";
     }
 }
 

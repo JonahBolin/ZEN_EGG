@@ -177,3 +177,20 @@ main {
 .pauseButton {
     display: flex;
 }
+
+.stretchingTitle {
+    text-align: center;
+}
+
+.affirmationMessage {
+    text-align: center;
+}
+
+.finalElementsDiv {
+    text-align: center;
+    margin-top: 140px;
+}
+
+.finalEggIcon {
+    height: 150px;
+}
