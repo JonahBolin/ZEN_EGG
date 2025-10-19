@@ -137,6 +137,14 @@ let timerInterval;
 let timeRemaining = 0;
 let isPaused = false;
 
+//för stretching -och affirmationssidan 
+
+let currentExerciseIndex = 0;
+let currentAffirmationIndex = 0;
+
+const nextExerciseButton = createButton("Next exercise");
+const nextAffirmationButton = createButton("Next affirmation");
+
 //övrigt
 
 let currentPage = "home";
@@ -172,6 +180,10 @@ function loadPage(page, isBack = false) {
         const appLogoParent = document.createElement("div");
         appLogoParent.id = "appLogoParent";
         mainScreen.appendChild(appLogoParent);
+
+        if (appLogo.classList.contains("appLogoSmall")) {
+            appLogo.classList.replace("appLogoSmall", "appLogoBig");
+        }
 
         appLogo.classList.add("appLogoBig");
 
@@ -431,7 +443,7 @@ function loadSummaryPage() {
 
     showButtons("ready");
 
-    timerDiv.append(timer, startButton);
+    timerDiv.append(timer, timerButtonsDiv);
     todaysPreferences.textContent = `Todays preferences:`;
     usersPreferences.textContent = `${chosenConsistency}, ${chosenSizeExtended}, ${eggsOfInputValue}, ${chosenWellness}`;
     preferencesDiv.append(todaysPreferences, usersPreferences);
@@ -449,7 +461,7 @@ const TEST_MODE = true;
 
 function startTimer(duration) {
     if (TEST_MODE) {
-        duration = 5; // 5 sekunder istället för 6 minuter
+        duration = 10; // 5 sekunder istället för 6 minuter
     }
     timeRemaining = duration;
     updateTimerDisplay();
@@ -478,30 +490,104 @@ function updateTimerDisplay() {
 
 // Styr vilka knappar som visas
 function showButtons(state) {
-    timerDiv.innerHTML = ""; // töm innehållet
-    timerDiv.appendChild(timer);
+    timerButtonsDiv.innerHTML = ""; // töm innehållet
 
     if (state === "ready") {
-        timerDiv.append(startButton);
+        timerButtonsDiv.append(startButton);
     } else if (state === "running") {
-        timerDiv.append(pauseButton, cancelButton);
+        timerButtonsDiv.append(pauseButton, cancelButton);
     } else if (state === "paused") {
-        timerDiv.append(startButton, cancelButton);
+        timerButtonsDiv.append(startButton, cancelButton);
     } else if (state === "finished") {
-        timerDiv.append(startButton);
+        timerButtonsDiv.append(startButton);
     }
 }
+
+let minfulnessTextDiv = document.createElement("div");
+minfulnessTextDiv.classList.add("mindfulnessTextDiv");
+
 
 startButton.addEventListener("click", () => {
     if (!timerStarted) {
         timerStarted = true;
         startTimer(timeRemaining);
 
+        minfulnessTextDiv.innerHTML = "";
+
+        if (chosenWellness === "Meditation") {
+            const meditationMessage = document.createElement("p");
+            meditationMessage.textContent = "Find a comfortable place to sit or stand, as well as a comfortable position to meditate in.";
+            minfulnessTextDiv.appendChild(meditationMessage);
+
+        } else if (chosenWellness === "Stretching exercises") {
+            currentExerciseIndex = 0;
+            showStretchingExercise(currentExerciseIndex);
+
+        } else if (chosenWellness === "Positive affirmations") {
+            currentAffirmationIndex = 0;
+            showPositiveAffirmations(currentAffirmationIndex);
+        }
+
+        mainScreen.appendChild(minfulnessTextDiv);
+
     } else if (isPaused) {
         isPaused = false
         showButtons("running");
     }
 });
+
+function showPositiveAffirmations(index) {
+    minfulnessTextDiv.innerHTML = "";
+
+    const affirmation = positiveAffirmations[index];
+    let affirmationMessage = document.createElement("p");
+    affirmationMessage.classList.add("affirmationMessage");
+    affirmationMessage.textContent = affirmation.message;
+
+    minfulnessTextDiv.appendChild(affirmationMessage);
+    mainScreen.appendChild(minfulnessTextDiv);
+
+    if (index < positiveAffirmations.length - 1) {
+        nextAffirmationButton.style.display = "inline-block";
+        divFooter.appendChild(nextAffirmationButton);
+    } else {
+        nextExerciseButton.style.display = "none";
+    }
+}
+
+function showStretchingExercise(index) {
+    minfulnessTextDiv.innerHTML = "";
+    const exercise = stretchingInstructionsArray[index];
+
+    let stretchingTitle = document.createElement("p");
+    let stretchingInstructions = document.createElement("p");
+
+    stretchingTitle.textContent = exercise.title;
+    stretchingInstructions.textContent = exercise.description;
+
+    stretchingTitle.classList.add("stretchingTitle");
+    stretchingInstructions.classList.add("stretchingInstructions");
+
+    minfulnessTextDiv.append(stretchingTitle, stretchingInstructions);
+
+    if (index < stretchingInstructionsArray.length - 1) {
+        nextExerciseButton.style.display = "inline-block";
+        divFooter.appendChild(nextExerciseButton);
+
+    } else {
+        nextExerciseButton.style.display = "none";
+    }
+}
+
+nextExerciseButton.addEventListener("click", () => {
+    currentExerciseIndex++;
+    showStretchingExercise(currentExerciseIndex);
+})
+
+nextAffirmationButton.addEventListener("click", () => {
+    currentAffirmationIndex++;
+    showPositiveAffirmations(currentAffirmationIndex);
+})
 
 pauseButton.addEventListener("click", () => {
     isPaused = true;
@@ -518,5 +604,7 @@ cancelButton.addEventListener("click", () => {
 
     loadPage("home");
 });
+
+console.log(positiveAffirmations.length);
 
 
