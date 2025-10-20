@@ -8,15 +8,30 @@
     src: url("fonts/Quicksand/Quicksand-VariableFont_wght.ttf");
 }
 
+@font-face {
+    font-family: "ProtestRiot-Regular.ttf";
+    src: url("fonts/Protest_Riot/ProtestRiot-Regular.ttf");
+}
+
 .font-zen-text {
     font-family: "Fredoka-VariableFont_wdth\,wght.ttf";
     letter-spacing: 0.52px;
-    font-size: 19px;
+    font-size: 20px;
 }
 
 .font-zen-buttons {
     font-family: "Quicksand-VariableFont_wght.tff";
     letter-spacing: 0.72px;
+}
+
+.font-zen-timer {
+    font-family: "ProtestRiot-Regular.ttf";
+    letter-spacing: 1.2px;
+    font-size: 40px;
+}
+
+.smallerFontSize {
+    font-size: 17px;
 }
 
 body {
@@ -35,17 +50,21 @@ main {
     background: rgba(164, 213, 136, 0.42);
     padding: 20px;
     box-sizing: border-box;
+    position: absolute;
 }
 
 .divHeader {
     height: 12%;
     width: 100%;
+    position: relative;
+    right: 12px;
 }
 
 .mainScreen {
     height: calc(100% - 12% - 12%);
     display: flex;
     flex-direction: column;
+    gap: 40px;
 }
 
 .divFooter {
@@ -55,16 +74,16 @@ main {
 }
 
 #appNameParent {
-    height: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: end;
+    height: 300px;
+    text-align: center;
+    margin-top: 100px;
 }
 
 #ZenEgg {
     font-family: "Fredoka-VariableFont_wdth\,wght.ttf";
     color: black;
     margin: 0px;
+    font-size: 48px;
 }
 
 #appLogoParent {
@@ -79,7 +98,6 @@ main {
 .appLogoSmall {
     width: 25%;
     padding-top: 14.5px;
-    padding-bottom: 14.5px;
 }
 
 .button {
@@ -92,6 +110,10 @@ main {
     justify-content: center;
     align-items: center;
     font-size: 20px;
+}
+
+.button:hover {
+    background-color: #e2a2b4;
 }
 
 .consistencyQuestion {
@@ -113,6 +135,7 @@ main {
     background-color: #F5B9CA;
     border-radius: 13px;
     border: 0px;
+    font-size: 15px;
 }
 
 .eggSizeChoiceDiv {
@@ -126,6 +149,7 @@ main {
     background-color: #F5B9CA;
     border-radius: 13px;
     border: 0px;
+    font-size: 15px;
 }
 
 .sizeButton:hover,
@@ -134,7 +158,7 @@ main {
 }
 
 .selected {
-    border: 2px solid #000;
+    border: 2px solid black;
 }
 
 .amountQuestion {
@@ -144,14 +168,30 @@ main {
 .amountInputDiv {
     display: flex;
     justify-content: center;
+    margin-bottom: 10px;
 }
 
 .amountInput {
     text-align: center;
+    height: 40px;
+    border-radius: 13px;
+    border: none;
+}
+
+.amountInput:focus {
+    outline: 2px solid rgba(0, 0, 0, 0.25);
 }
 
 .boilingInfoDiv {
     text-align: center;
+}
+
+.boilingTimeInfo {
+    margin-bottom: 5px;
+}
+
+.boilingWaterInfo {
+    margin: 0px;
 }
 
 .backButton {
@@ -159,6 +199,7 @@ main {
     height: 51px;
     background: none;
     border: none;
+    padding: 0px;
 }
 
 .backArrow {
@@ -167,6 +208,10 @@ main {
 
 .wellnessQuestionParent {
     text-align: center;
+}
+
+.wellnessQuestion {
+    margin-bottom: 35px;
 }
 
 .wellnessChoicesDiv {
@@ -189,10 +234,12 @@ main {
 .timer {
     text-align: center;
     margin-top: 0px;
+    margin-bottom: 5px;
 }
 
 .todaysPreferences {
     text-align: center;
+    margin-bottom: 0px;
 }
 
 .timerButtonsDiv {
@@ -210,12 +257,22 @@ main {
     display: flex;
 }
 
-.meditationMessage {
-    text-align: center;
+.mindfulnessTextDiv {
+    width: 300px;
+    margin: 0 auto;
 }
 
 .stretchingTitle {
     text-align: center;
+    margin-bottom: 5px;
+}
+
+.meditationMessage {
+    font-size: 17px;
+}
+
+.stretchingInstructions {
+    margin: 0px;
 }
 
 .affirmationMessage {
@@ -224,7 +281,6 @@ main {
 
 .finalElementsDiv {
     text-align: center;
-    margin-top: 140px;
 }
 
 .finalEggIcon {
@@ -233,4 +289,14 @@ main {
 
 .usersPreferences {
     text-align: center;
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+.promptToChoose {
+    margin: 0px;
+}
+
+.preferencesDiv {
+    margin-top: 35px;
 }
