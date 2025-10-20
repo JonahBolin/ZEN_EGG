@@ -107,15 +107,6 @@ affirmationsButton.addEventListener("click", () => {
     loadPage("summaryPage");
 })
 
-//4:e sidan
-// const backToWellnessChoicesButton = document.createElement("button");
-// const backArrow2 = document.createElement("img");
-// backArrow2.src = "./ikoner/back_arrow.png";
-// backArrow2.classList.add("backArrow");
-// backToWellnessChoicesButton.classList.add("backToWellnessChoicesButton", "backButton");
-
-//övrigt
-
 //5:e sidan
 const timerDiv = document.createElement("div");
 const timer = document.createElement("p");
@@ -157,7 +148,6 @@ let currentAffirmationIndex = 0;
 
 const nextExerciseButton = createButton("Next exercise");
 const nextAffirmationButton = createButton("Next affirmation");
-
 
 //7:e sidan 
 
@@ -205,8 +195,7 @@ function loadPage(page, isBack = false) {
 
         appLogo.classList.add("appLogoBig");
 
-        appLogoParent.appendChild(appLogo);
-
+        appLogoParent.appendChild(appLogo); 76
         divFooter.appendChild(homeButton);
     }
 
@@ -425,7 +414,6 @@ function getBoilingInfo(selectedConsistency, selectedsize, inputValue) {
         }
     }
 
-    //beräkna vattenmängd:
     const inputValueConverted = Number(inputValue);
     if (inputValueConverted <= 1) {
         boilingWaterInfo.textContent = "Use a small saucepan and fill it with enough water so that it covers the egg";
@@ -471,15 +459,14 @@ function loadSummaryPage() {
     mainScreen.innerHTML = "";
 
     clearInterval(timerInterval);
-    backToLastPageDiv.innerHTML = ""; // rensa tidigare knapp så du inte får dubbletter
+    backToLastPageDiv.innerHTML = "";
     const backToChoicesButton = createBackButton();
     backToLastPageDiv.appendChild(backToChoicesButton);
     mainScreen.appendChild(backToLastPageDiv);
 
     isPaused = false;
     timerStarted = false;
-    timeRemaining = boilingMinutesVariable * 60; // reset till ny koktid
-    updateTimerDisplay(); // visa korrekt starttid
+    timeRemaining = boilingMinutesVariable * 60;
 
     timer.textContent = boilingMinutesVariable;
     if (boilingMinutesVariable < 10) {
@@ -533,25 +520,17 @@ function loadSummaryPage() {
 
 }
 
-
-// let timerInterval;
-// let timeRemaining = 0;
-// let isPaused = false;
-const TEST_MODE = true;
-
 const alertSound = new Audio("./audio/morning-joy-alarm-clock-20961.mp3");
 
 function startTimer(duration) {
-    if (TEST_MODE) {
-        duration = 10; // 5 sekunder istället för 6 minuter
-    }
+
     timeRemaining = duration;
     updateTimerDisplay();
     showButtons("running");
 
     preferencesDiv.innerHTML = "";
 
-    clearInterval(timerInterval); // säkerhetsåtgärd
+    clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         if (!isPaused && timeRemaining > 0) {
             timeRemaining--;
@@ -602,9 +581,8 @@ function updateTimerDisplay() {
     timer.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-// Styr vilka knappar som visas
 function showButtons(state) {
-    timerButtonsDiv.innerHTML = ""; // töm innehållet
+    timerButtonsDiv.innerHTML = "";
 
     if (state === "ready") {
         timerButtonsDiv.append(startButton);
