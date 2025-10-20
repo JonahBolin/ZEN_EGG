@@ -37,7 +37,9 @@
 body {
     width: 100%;
     height: auto;
+    overflow: hidden;
     margin: 0px;
+    padding: 0px;
 }
 
 main {
@@ -51,6 +53,12 @@ main {
     padding: 20px;
     box-sizing: border-box;
     position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .divHeader {
@@ -269,6 +277,7 @@ main {
 
 .meditationMessage {
     font-size: 17px;
+    margin-top: 40px;
 }
 
 .stretchingInstructions {

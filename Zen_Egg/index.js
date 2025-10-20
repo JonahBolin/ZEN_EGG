@@ -211,7 +211,8 @@ function loadPage(page, isBack = false) {
     }
 
     if (page === "eggChoices") {
-        loadEggChoice();
+        const comesFromHome = previousPage === "home";
+        loadEggChoice(comesFromHome);
     }
 
     if (page === "wellnessChoices") {
@@ -225,7 +226,7 @@ function loadPage(page, isBack = false) {
 
 homeButton.addEventListener("click", () => loadPage("eggChoices"));
 
-function loadEggChoice() {
+function loadEggChoice(comesFromHome) {
     console.log("Hej!");
 
     changeLogoSize();
@@ -233,7 +234,24 @@ function loadEggChoice() {
     mainScreen.innerHTML = "";
     divFooter.innerHTML = "";
 
-    amountInput.value = inputValue;
+    mainScreen.style.gap = "40px";
+
+    if (comesFromHome) {
+        chosenConsistency = "";
+        chosenSize = "";
+        inputValue = "";
+
+        const allConsistencyButtons = [hardButton, softButton, runnyButton];
+        allConsistencyButtons.forEach(button => button.classList.remove("selected", "buttonPressed"));
+
+        const allSizeButtons = [eggSizeSButton, eggSizeMButton, eggSizeLButton, eggSizeXLButton];
+        allSizeButtons.forEach(button => button.classList.remove("selected", "buttonPressed"));
+
+        amountInput.value = "";
+    } else {
+        amountInput.value = inputValue;
+    }
+
     divFooter.appendChild(nextButton);
 
     //section 1
@@ -313,6 +331,7 @@ function loadEggChoice() {
 
             boilingInfoDiv.innerHTML = "";
             const promptToChoose = document.createElement("p");
+            promptToChoose.style.fontSize = "17px";
             promptToChoose.textContent = "Invalid amount";
             promptToChoose.classList.add("promptToChoose", "font-zen-text");
             boilingInfoDiv.appendChild(promptToChoose);
@@ -487,17 +506,31 @@ function loadSummaryPage() {
 
     showButtons("ready");
 
-    const meditationMessage = document.createElement("p");
-    meditationMessage.classList.add("meditationMessage", "font-zen-text");
-    meditationMessage.textContent = "Find a comfortable place to sit or stand ";
-    minfulnessTextDiv.appendChild(meditationMessage);
-    timerDiv.append(timer, timerButtonsDiv);
-    todaysPreferences.textContent = `Todays preferences:`;
-    usersPreferences.textContent = `${chosenConsistency}, ${chosenSizeExtended}, ${eggsOfInputValue}, ${chosenWellness}`;
-    preferencesDiv.append(todaysPreferences, usersPreferences, meditationMessage);
-    summaryDiv.append(timerDiv, preferencesDiv);
+    if (chosenWellness === "Meditation") {
+        preferencesDiv.innerHTML = "";
+        const meditationMessage = document.createElement("p");
+        meditationMessage.classList.add("meditationMessage", "font-zen-text");
+        meditationMessage.textContent = "Find a comfortable place to sit or stand ";
+        minfulnessTextDiv.appendChild(meditationMessage);
 
-    mainScreen.appendChild(summaryDiv);
+        timerDiv.append(timer, timerButtonsDiv);
+        todaysPreferences.textContent = `Todays preferences:`;
+        usersPreferences.textContent = `${chosenConsistency}, ${chosenSizeExtended}, ${eggsOfInputValue}, ${chosenWellness}`;
+        preferencesDiv.append(todaysPreferences, usersPreferences, meditationMessage);
+        summaryDiv.append(timerDiv, preferencesDiv);
+
+        mainScreen.appendChild(summaryDiv);
+    } else if (chosenWellness === "Stretching exercises" || chosenWellness === "Positive affirmations") {
+        preferencesDiv.innerHTML = "";
+        timerDiv.append(timer, timerButtonsDiv);
+        todaysPreferences.textContent = `Todays preferences:`;
+        usersPreferences.textContent = `${chosenConsistency}, ${chosenSizeExtended}, ${eggsOfInputValue}, ${chosenWellness}`;
+        preferencesDiv.append(todaysPreferences, usersPreferences);
+        summaryDiv.append(timerDiv, preferencesDiv);
+
+        mainScreen.appendChild(summaryDiv);
+    }
+
 }
 
 
@@ -506,6 +539,7 @@ function loadSummaryPage() {
 // let isPaused = false;
 const TEST_MODE = true;
 
+const alertSound = new Audio("./audio/morning-joy-alarm-clock-20961.mp3");
 
 function startTimer(duration) {
     if (TEST_MODE) {
@@ -524,10 +558,21 @@ function startTimer(duration) {
             updateTimerDisplay();
         } else if (timeRemaining <= 0) {
             clearInterval(timerInterval);
+
+            alertSound.currentTime = 0;
+            alertSound.volume = 0.6;
+            alertSound.play().catch((error) => {
+                console.log("Kunde inte spela ljudet:", error);
+            })
+
             alert("Your eggs are ready!");
 
-            minfulnessTextDiv.innerHTML = "";
+            alertSound.pause();
+            alertSound.currentTime = 0;
+
+            minfulnessTextDiv.remove();
             timerButtonsDiv.innerHTML = "";
+            finalElementsDiv.innerHTML = "";
 
             const finalEggIcon = document.createElement("img");
             finalEggIcon.src = "./ikoner/lotus.png";
@@ -624,6 +669,7 @@ function showPositiveAffirmations(index) {
 
 function showStretchingExercise(index) {
     minfulnessTextDiv.innerHTML = "";
+    mainScreen.style.gap = "0px";
     const exercise = stretchingInstructionsArray[index];
 
     let stretchingTitle = document.createElement("p");
@@ -671,7 +717,3 @@ cancelButton.addEventListener("click", () => {
 
     loadPage("home");
 });
-
-console.log(positiveAffirmations.length);
-
-
